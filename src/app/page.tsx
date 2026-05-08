@@ -790,7 +790,7 @@ export default function Home() {
             <div className="text-center text-sm text-gray-400 space-y-2">
               <p>상호: 제이코리아 | 대표: 이주영</p>
               <p>사업자등록번호: 278-30-01540</p>
-              <p>주소: 인천광역시 계양구 오조산로57번길 15, 7층 7106호</p>
+              <p>주소: 서울특별시 강남구 도곡로84길 6, B1층 25-68호</p>
             </div>
           </div>
 
