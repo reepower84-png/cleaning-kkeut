@@ -741,6 +741,19 @@ export default function Home() {
                 {isSubmitting ? "전송 중..." : "상담 신청하기"}
               </button>
 
+              <a
+                href="http://pf.kakao.com/_xjXuhX/chat"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full py-4 font-semibold rounded-xl transform hover:scale-[1.02] transition-all shadow-lg flex items-center justify-center gap-2"
+                style={{ backgroundColor: "#FEE500", color: "#191919" }}
+              >
+                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M12 3C6.48 3 2 6.48 2 10.8c0 2.79 1.86 5.23 4.65 6.6-.21.79-.76 2.86-.87 3.3-.13.55.2.55.42.4.17-.12 2.74-1.86 3.85-2.62.65.09 1.3.14 1.95.14 5.52 0 10-3.48 10-7.82C22 6.48 17.52 3 12 3z"/>
+                </svg>
+                카카오톡으로 상담하기
+              </a>
+
               {submitStatus === "success" && (
                 <div className="p-4 bg-green-50 border border-green-200 rounded-xl text-green-700 text-center">
                   상담 신청이 완료되었습니다. 빠른 시일 내에 연락드리겠습니다.
