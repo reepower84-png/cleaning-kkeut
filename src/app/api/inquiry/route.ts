@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { supabase } from "@/lib/supabase";
+import { backupFetch } from "../../../lib/inquiry-backup";
 
 async function sendDiscordNotification(inquiry: {
   name: string;
@@ -9,8 +9,7 @@ async function sendDiscordNotification(inquiry: {
   const webhookUrl = process.env.DISCORD_WEBHOOK_URL;
 
   if (!webhookUrl) {
-    console.error("Discord webhook URL is not configured");
-    return;
+    throw new Error("Discord webhook URL is not configured");
   }
 
   const embed = {
@@ -43,16 +42,16 @@ async function sendDiscordNotification(inquiry: {
     ],
   };
 
-  try {
-    await fetch(webhookUrl, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(embed),
-    });
-  } catch (error) {
-    console.error("Failed to send Discord notification:", error);
+  const response = await backupFetch(webhookUrl, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(embed),
+  });
+
+  if (!response.ok) {
+    throw new Error(`Discord webhook failed: ${response.status}`);
   }
 }
 
@@ -68,33 +67,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Save to Supabase
-    const { data, error } = await supabase
-      .from("inquiries")
-      .insert([
-        {
-          name,
-          phone,
-          message,
-          status: "대기중",
-        },
-      ])
-      .select()
-      .single();
-
-    if (error) {
-      console.error("Supabase error:", error);
-      return NextResponse.json(
-        { error: "문의 저장 중 오류가 발생했습니다." },
-        { status: 500 }
-      );
-    }
-
-    // Send Discord notification
     await sendDiscordNotification({ name, phone, message });
 
     return NextResponse.json(
-      { message: "문의가 성공적으로 접수되었습니다.", inquiry: data },
+      { message: "문의가 성공적으로 접수되었습니다." },
       { status: 200 }
     );
   } catch (error) {
